@@ -1,6 +1,6 @@
 const { ApolloServer } = require('apollo-server');
 const typeDefs = require('./schema');
-
+// syntax error near unexpected token `('
 const server = new ApolloServer({ typeDefs });
 
 

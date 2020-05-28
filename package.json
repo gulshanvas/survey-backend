@@ -4,7 +4,8 @@
   "description": "Survey is a project which will be used for getting reviews by multiple users",
   "main": "apollo/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node apollo/index.js"
   },
   "author": "Gulshan Vasnani",
   "license": "ISC",
