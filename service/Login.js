@@ -75,7 +75,7 @@ class Login {
    */
   async _getUser() {
     this.userObj = await userModel.getUser(this.email);
-    if (this.userObj.users.length === 0) {
+    if (!this.userObj.users || this.userObj.users.length === 0) {
       throw new Error('User is not present. Please sign up');
     }
   }

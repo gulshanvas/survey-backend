@@ -16,6 +16,10 @@ class UserConstants {
     return 'respondent';
   }
 
+  get minPasswordLength() {
+    return 8
+  }
+
 }
 
 module.exports = new UserConstants();

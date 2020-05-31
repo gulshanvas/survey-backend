@@ -13,10 +13,7 @@ class CookieHelper {
   static validateLoginCookie(request) {
     const loginCookie = request.cookies['logintoken'];
     if(!loginCookie) {
-      return {
-        success: false,
-        message: 'Please login'
-      }
+      throw new Error('Please login in');
     }
 
     const decodedObject = JWT.verifyLoginCookie(loginCookie);

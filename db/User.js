@@ -20,7 +20,7 @@ class User {
   formatDbData(userObj) {
     const users = [];
     if (userObj.size === 0) {
-      return;
+      return {};
     }
 
     userObj.forEach(doc => {
@@ -49,7 +49,7 @@ class User {
     const oThis = this;
 
     const records = await oThis.getUser(email);
-    return records.users.length !== 0
+    return (records.users && records.users.length !== 0);
   }
 
   /**
@@ -63,7 +63,7 @@ class User {
     const formatterUser = this.formatDbData(records);
 
     return {
-      users: formatterUser.users
+      users: formatterUser.users || null
     };
   }
 

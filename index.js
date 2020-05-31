@@ -4,12 +4,39 @@ const express = require('express'),
   JWTToken = require('./auth/JWT'),
   signUpResolver = require('./resolvers/signup'),
   loginResolver = require('./resolvers/login'),
+  surveyResolver = require('./resolvers/survey'),
   { buildSchema } = require('graphql');
 
 var schema = buildSchema(`
   type Query {
-    hello(name: String!): String
-    auth(loginCookie: String!): String
+   fetchSurveys(survey: ID): String! 
+  }
+
+  type Response {
+    success: Boolean!,
+    message: String!
+  }
+
+  input Survey {
+    criteria: String!,
+    formSchema: String!
+  }
+
+  input RespondentResponse {
+    surveyId: String!,
+    formResponse: String!
+  }
+
+  input CoOrdinatorResponse {
+    surveyId: String!,
+    userId: String!,
+    response: String!
+  }
+
+  type Mutation {
+    createSurvey(survey: Survey): Response
+    submitResponse(response: RespondentResponse): Response
+    updateResponse(response: CoOrdinatorResponse): Response
   }
 `);
 
@@ -33,16 +60,7 @@ var signUpSchema = buildSchema(`
     password: String!,
     type: String!, 
     age: Int!, 
-    gender: String!,
-  }
-
-  type UserOutput {
-    firstname: String!, 
-    lastname: String!, 
-    email: String!, 
-    type: String!, 
-    age: Int!, 
-    gender: String!,
+    gender: String!
   }
 
   type Response {
@@ -51,7 +69,7 @@ var signUpSchema = buildSchema(`
   }
 
   type Query {
-    getLoggedIn(id: ID!): UserOutput
+    signupuser(id: ID!): String!
   }
   type Mutation {
     signup(userInfo: User): Response
@@ -61,27 +79,6 @@ var signUpSchema = buildSchema(`
 const loggingMiddleware = (req, res, next) => {
   console.log('host :', req.headers.host);
   next();
-}
-
-// Resolver function for API endpoint.
-var root = {
-  hello: ({ name, context }) => {
-    return `Hello ${name}`;
-  },
-  auth: ({ loginCookie }, injector) => {
-    console.log('request cookie : ', injector.request.headers.cookie["gulshan"]);
-    console.log('process.env.jwtsecret : ', process.env.JWT_SECRET_KEY);
-    const secretToken = JWTToken.generateToken("gulshan");
-    const verified = JWTToken.verifyLoginCookie(injector.request.cookies["jwttoken"]);
-    console.log('verified : ', verified);
-    injector.response.cookie("jwttoken", secretToken);
-    if (loginCookie === 'gulshan') {
-      return `Authenticated`
-    }
-    else {
-      return `rejected`;
-    }
-  },
 }
 
 var app = express();
@@ -118,7 +115,7 @@ app.use("/login", graphqlHTTP((request, response) => {
 app.use('/graphql', graphqlHTTP((request, response) => {
   return {
     schema: schema,
-    rootValue: root,
+    rootValue: surveyResolver,
     graphiql: true,
     context:
     {

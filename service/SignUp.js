@@ -68,10 +68,12 @@ class SignUp {
   }
 
   /**
-   * 
+   * Validates length of password.
    */
   _validatePassword() {
-    // todo: policy
+    if(this.password.trim().length < userContants.minPasswordLength) {
+      throw new Error('Password does not adhere to password policy');
+    }
   }
 
   /**

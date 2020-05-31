@@ -8,7 +8,8 @@ loginResolver = async function ({ email, password }, context) {
     context.response.cookie("logintoken", response.userLoginToken);
     return {
       success: true,
-      loginCookie: response.userLoginToken
+      loginCookie: response.userLoginToken,
+      message: 'Logged in successfully'
     }
   } catch (err) {
     console.log('err : ',err);
