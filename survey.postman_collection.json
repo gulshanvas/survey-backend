@@ -1,0 +1,202 @@
+{
+	"info": {
+		"_postman_id": "9522307f-a102-44f8-b2c7-6fc498b0ee85",
+		"name": "survey",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "signup",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-dev-env",
+						"value": "true",
+						"type": "text"
+					},
+					{
+						"key": "referer",
+						"value": "complete_profile",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation {\n  signup(\n    userInfo: \n    {\n      firstname: \"karan\", \n      lastname: \"vasnani\", \n      email: \"karan@gmail.com\", \n      password: \"12345678\", \n      type: \"respondent\", \n      age: 40, \n      gender: \"male\"}\n  ) {\n    success,\n    message\n  }\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-dev-env",
+						"value": "true",
+						"type": "text"
+					},
+					{
+						"key": "referer",
+						"value": "complete_profile",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "{\n  login(email:\"gulshanslvasnani@gmail.com\", password:\"12345678\") {\n    success,\n    loginCookie\n  }\n}\n",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create-survey",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-dev-env",
+						"type": "text",
+						"value": "true"
+					},
+					{
+						"key": "referer",
+						"type": "text",
+						"value": "complete_profile",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation {\n  createSurvey(\n    survey: \n    {\n      criteria: \"{\\\"minAge\\\":20,\\\"maxAge\\\":40, \\\"gender\\\":\\\"any\\\"}\", \n      formSchema: \"{name:{type:'string',title:'Name',required:true},age:{type:'number',title:'Age'}}\"\n    }\n  ) {\n    success,\n    message\n  }\n}\n",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update-response",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-dev-env",
+						"type": "text",
+						"value": "true"
+					},
+					{
+						"key": "referer",
+						"type": "text",
+						"value": "complete_profile",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation {\n  updateResponse(\n    response: \n    {\n      formResponse: \"{\\\"name\\\":\\\"gulshan\\\", \\\"age\\\":30}\", \n      surveyId:\"2IxGj3J9M3EU4b0zmV1j\",\n      userId:\"gWVIxTX4ESTvhSQBJ0FG\"\n    }\n  ) {\n    success,\n    message\n  }\n}\n",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "submit response",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "fetch-surveys",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "{\n  fetchSurveys {\n    surveys{\n      key,\n      formSchema\n    }\n  }\n}\n",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
