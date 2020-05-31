@@ -19,8 +19,13 @@ var schema = buildSchema(`
     message: String!
   }
 
+  type SurveyOutput {
+    formSchema: String!
+  }
+
   type Query {
    fetchSurveys: SurveyResponse
+   fetchSurvey(surveyId: String!): SurveyOutput
   }
 
   type Response {
@@ -41,7 +46,7 @@ var schema = buildSchema(`
   input CoOrdinatorResponse {
     surveyId: String!,
     userId: String!,
-    response: String!
+    formResponse: String!
   }
 
   type Mutation {

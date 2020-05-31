@@ -110,6 +110,10 @@ class Survey {
     return filteredRecords;
   }
 
+  /**
+   * Returns survey details.
+   * @param {} params 
+   */
   async getSurvey(params) {
     const oThis = this;
     const response = await oThis.surveyCollection.doc(params.surveyId).get();

@@ -71,13 +71,24 @@ class SurveyReporting {
   /**
    * It updates the response to the survey.
    */
-  async update() {
+  async update(params) {
     const oThis = this;
 
-    await oThis.surveyReportingCollection
+    const fetchedBasedOnSurveyId = await oThis.surveyReportingCollection
       .where("surveyId", "==", params.surveyId)
-      .where("userId", "==", params.userId)
-      .update("formResponse", params.formResponse);
+      .get();
+
+    let docId = undefined;
+
+    fetchedBasedOnSurveyId.forEach(doc => {
+      const data = doc.data();
+      if (data.userId === params.userId) {
+        docId = doc.id;
+      }
+    });
+
+    await oThis.surveyReportingCollection.doc(docId).update({response: params.formResponse});
+
   }
 }
 
