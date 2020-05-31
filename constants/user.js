@@ -20,6 +20,18 @@ class UserConstants {
     return 8
   }
 
+  get male() {
+    return "male";
+  }
+
+  get female() {
+    return "female";
+  }
+
+  get anyGender() {
+    return "any";
+  }
+
 }
 
 module.exports = new UserConstants();

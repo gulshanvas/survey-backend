@@ -1,4 +1,5 @@
-const firebaseDb = require('./init-firebase');
+const firebaseDb = require('./init-firebase'),
+  userConstants = require('../constants/user');
 
 /**
  * Survey model.
@@ -13,7 +14,7 @@ class Survey {
     oThis.surveyCollection = firebaseDb.collection('surveys');
   }
 
- /**
+  /**
    * It formats the object.
    * @param {object} surveyObj 
    */
@@ -64,15 +65,49 @@ class Survey {
   }
 
   /**
-   * 
+   * Fetches queries based on criteria.
    * @param {*} param
    */
-  async buildCriteria({
-    age: age,
-    gender: gender,
-  }) {
-    // query based on minAge and maxAge - sruveys
-    // apply filter for opposite gender for logged in user -- 
+  async fetchByCriteria(params) {
+    const minAgeRecords = await this.surveyCollection.where("criteria.minAge", "<=", params.age).get();
+    const maxAgeRecords = await this.surveyCollection.where("criteria.maxAge", ">=", params.age).get();
+
+    const minAgeFilterOnGender = this.filterOnGender(minAgeRecords, params.gender);
+    const maxAgeFilterOnGender = this.filterOnGender(maxAgeRecords, params.gender);
+
+    const uniqueRecords = [];
+    for (const key in minAgeFilterOnGender) {
+      if (maxAgeFilterOnGender[key].formSchema) {
+        const record = {
+          key: key,
+          formSchema: maxAgeFilterOnGender[key].formSchema
+        };
+
+        uniqueRecords.push(record);
+      }
+    }
+
+    return uniqueRecords;
+
+  }
+
+  /**
+   * Filters the records based on gender.
+   * 
+   * @param {Array} records Data from model
+   * @param {string} gender Gender of the user
+   */
+  filterOnGender(records, gender) {
+    let filteredRecords = {};
+    let record;
+    records.forEach(doc => {
+      const data = doc.data();
+      if (data.criteria.gender === gender || data.criteria.gender === userConstants.anyGender) {
+        filteredRecords[doc.id] = { formSchema: data.formSchema };
+      }
+    });
+    console.log('filteredRecords : ', filteredRecords);
+    return filteredRecords;
   }
 
   async getSurvey(params) {
@@ -84,6 +119,3 @@ class Survey {
 }
 
 module.exports = new Survey();
-
-// obj = new Survey();
-// obj.getSurvey().then(console.log);

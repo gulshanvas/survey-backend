@@ -23,6 +23,8 @@ class SubmitResponse {
   async perform() {
     await this._validate();
     await this._submitResponse();
+
+    // todo: update isAccepted in survey
   }
 
   /**

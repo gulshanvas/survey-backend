@@ -8,8 +8,19 @@ const express = require('express'),
   { buildSchema } = require('graphql');
 
 var schema = buildSchema(`
+  type Surveys {
+    key: String!
+    formSchema: String!
+  }
+
+  type SurveyResponse {
+    surveys: [Surveys]
+    success: Boolean!
+    message: String!
+  }
+
   type Query {
-   fetchSurveys(survey: ID): String! 
+   fetchSurveys: SurveyResponse
   }
 
   type Response {
